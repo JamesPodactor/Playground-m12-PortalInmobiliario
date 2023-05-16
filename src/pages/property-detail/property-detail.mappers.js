@@ -3,14 +3,14 @@ export const mapPropertyDetailApiToVm = (property, equipments) => ({
   id: property.id,
   title: property.title,
   notes: `${property.notes}`,
-  price: `${property.price} €`,
+  price: `${property.price.toLocaleString()} €`,
   city: property.city,
   squareMeter: `${property.squareMeter} m2`,
   rooms: `${property.rooms} ${getRoomWord(property.rooms)}`,
   bathrooms: `${property.bathrooms} ${getBathRoomWord(property.bathrooms)}`,
   locationUrl: property.locationUrl,
   mainFeatures: property.mainFeatures,
-  equipmentsIds: getEquipmentName(property.equipmentIds, equipments),
+  equipments: getEquipmentName(property.equipmentIds, equipments),
   images: property.images,
 });
 
@@ -19,11 +19,17 @@ const getRoomWord = (rooms) => (rooms > 1 ? 'habitaciones' : 'habitación');
 const getBathRoomWord = (bathRooms) => (bathRooms > 1 ? 'baños' : 'baño');
 
 const getEquipmentName = (equipmentsIds, equipments) => {
-  console.log(equipmentsIds)
   return equipmentsIds.map(equipmentId => {
-    const filteredEquipment = equipments.filter(equipment => {
+    const filteredEquipment = equipments.find(equipment => {
       return equipment.id === equipmentId
     })
     return filteredEquipment.name;
   });
-}
+};
+
+export const mapContactVmToApi = contact => {
+  return {
+    email: contact.email,
+    message: contact.message,
+  }
+};

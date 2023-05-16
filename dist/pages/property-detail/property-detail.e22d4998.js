@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"fgyhi":[function(require,module,exports) {
+})({"dlcNL":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "0792776ea2fe2356";
+module.bundle.HMR_BUNDLE_ID = "dc35afd9e22d4998";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, globalThis, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -4685,6 +4685,80 @@ Object.entries(HttpStatusCode).forEach(([key, value])=>{
 });
 exports.default = HttpStatusCode;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fgyhi"], null, "parcelRequire4bdb")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lvY4R":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "onUpdateField", ()=>onUpdateField);
+parcelHelpers.export(exports, "onSubmitForm", ()=>onSubmitForm);
+parcelHelpers.export(exports, "onAddFile", ()=>onAddFile);
+parcelHelpers.export(exports, "onSetError", ()=>onSetError);
+parcelHelpers.export(exports, "onSetFormErrors", ()=>onSetFormErrors);
+parcelHelpers.export(exports, "onSetValues", ()=>onSetValues);
+const onUpdateField = (id, callback)=>{
+    const element = document.getElementById(id);
+    element.oninput = (event)=>callback(event);
+    if (element.type !== "checkbox") element.onblur = (event)=>callback(event);
+};
+const onSubmitForm = (id, callback)=>{
+    const element = document.getElementById(id);
+    element.onclick = (e)=>{
+        e.preventDefault();
+        callback();
+    };
+};
+const onAddFile = (id, callback)=>{
+    const input = document.getElementById(id);
+    input.onchange = ()=>{
+        const file = input.files[0];
+        const fileReader = new FileReader();
+        fileReader.onloadend = ()=>{
+            callback(fileReader.result);
+        };
+        fileReader.readAsDataURL(file);
+    };
+};
+const onSetError = (id, error)=>{
+    if (error.succeeded) {
+        removeElementClass(id);
+        setErrorMessage(id, "");
+    } else {
+        setElementClass(id);
+        setErrorMessage(id, error.message);
+    }
+};
+const setElementClass = (id)=>{
+    const element = document.getElementById(id);
+    if (element) element.classList.add("error");
+};
+const removeElementClass = (id)=>{
+    const element = document.getElementById(id);
+    if (element) element.classList.remove("error");
+};
+const setErrorMessage = (id, message)=>{
+    const messageElement = document.getElementById(`${id}-error`);
+    if (messageElement) messageElement.textContent = message;
+};
+const onSetFormErrors = ({ fieldErrors  })=>{
+    Object.entries(fieldErrors).forEach(([key, value])=>{
+        onSetError(key, value);
+    });
+};
+const setValue = (element, value)=>{
+    const elementType = element.tagName.toLowerCase();
+    if (elementType === "select" || elementType === "input" || elementType === "textarea") element.value = value;
+    else element.textContent = value;
+};
+const onSetValue = (id, value)=>{
+    const element = document.getElementById(id);
+    console.log({
+        element
+    });
+    if (element) setValue(element, value);
+};
+const onSetValues = (values)=>{
+    Object.entries(values).forEach(([key, value])=>onSetValue(key, value));
+};
 
-//# sourceMappingURL=property-detail.a2fe2356.js.map
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["dlcNL"], null, "parcelRequire4bdb")
+
+//# sourceMappingURL=property-detail.e22d4998.js.map

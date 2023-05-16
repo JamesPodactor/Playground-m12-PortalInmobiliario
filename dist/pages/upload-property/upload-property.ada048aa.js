@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"eJXPq":[function(require,module,exports) {
+})({"aN4KM":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "a10d49188cf1b399";
+module.bundle.HMR_BUNDLE_ID = "054276b2ada048aa";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, globalThis, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -556,68 +556,269 @@ function hmrAccept(bundle, id) {
     });
 }
 
-},{}],"aoGpU":[function(require,module,exports) {
-var _propertyDetailApi = require("./property-detail.api");
-var _propertyDetailMappers = require("./property-detail.mappers");
-var _history = require("../../core/router/history");
-var _propertyDetailHelpers = require("./property-detail.helpers");
-var _elementHelpers = require("../../common/helpers/element.helpers");
-var _propertyDetailValidations = require("./property-detail.validations");
-const params = (0, _history.history).getParams();
-Promise.all([
-    (0, _propertyDetailApi.getProperty)(params.id),
-    (0, _propertyDetailApi.getEquipments)()
-]).then(([apiProperty, equipments])=>{
-    const vMProperty = (0, _propertyDetailMappers.mapPropertyDetailApiToVm)(apiProperty, equipments);
-    (0, _propertyDetailHelpers.setPropertyValues)(vMProperty);
-});
-let contact = {
+},{}],"1pyLr":[function(require,module,exports) {
+var _uploadPropertyApi = require("./upload-property.api");
+var _uploadPropertyHelpers = require("./upload-property.helpers");
+var _helpers = require("../../common/helpers");
+var _uploadPropertyValidations = require("./upload-property.validations");
+var _uploadPropertyMappers = require("./upload-property.mappers");
+let newProperty = {
+    title: "",
+    notes: "",
     email: "",
-    message: ""
+    phone: "",
+    price: "",
+    saleTypes: [],
+    address: "",
+    city: "",
+    province: "",
+    squareMeter: "",
+    rooms: "",
+    bathrooms: "",
+    locationUrl: "",
+    newFeature: "",
+    mainFeatures: [],
+    equipments: [],
+    images: ""
 };
-(0, _elementHelpers.onUpdateField)("email", (event)=>{
-    const value = event.target.value;
-    contact = {
-        ...contact,
-        email: value
+Promise.all([
+    (0, _uploadPropertyApi.getSaleTypeList)(),
+    (0, _uploadPropertyApi.getProvinceList)(),
+    (0, _uploadPropertyApi.getEquipments)()
+]).then(([saleTypeList, provinceList, equipmentList])=>{
+    (0, _uploadPropertyHelpers.setCheckboxList)(saleTypeList, "saleTypes");
+    setSalesEvents(saleTypeList);
+    (0, _uploadPropertyHelpers.setOptionList)(provinceList, "province");
+    (0, _uploadPropertyHelpers.setCheckboxList)(equipmentList, "equipments");
+    setEquipmentEvents(equipmentList);
+});
+const addSaleType = (value)=>{
+    newProperty = {
+        ...newProperty,
+        saleTypes: [
+            ...newProperty.saleTypes,
+            value
+        ]
     };
-    (0, _propertyDetailValidations.formValidation).validateField("email", contact.email).then((result)=>{
-        (0, _elementHelpers.onSetError)("email", result);
+};
+const removeSaleType = (value)=>{
+    const idElement = newProperty.saleTypes.indexOf(value);
+    newProperty = newProperty.saleTypes.filter((element)=>{});
+};
+const addEquipment = (value)=>{
+    newProperty = {
+        ...newProperty,
+        equipments: [
+            ...newProperty.equipments,
+            value
+        ]
+    };
+};
+const removeEquipment = (value)=>{
+    const idCheckbox = newProperty.equipment.indexOf(value);
+    newProperty = newProperty.equipment.filter((element)=>{});
+};
+// DATOS GENERALES ________________________________________________________
+(0, _helpers.onUpdateField)("title", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        title: value
+    };
+    (0, _uploadPropertyValidations.formValidation).validateField("title", newProperty.title).then((result)=>{
+        (0, _helpers.onSetError)("title", result);
     });
 });
-(0, _elementHelpers.onUpdateField)("message", (event)=>{
+(0, _helpers.onUpdateField)("notes", (event)=>{
     const value = event.target.value;
-    contact = {
-        ...contact,
-        message: value
+    newProperty = {
+        ...newProperty,
+        notes: value
+    };
+    (0, _uploadPropertyValidations.formValidation).validateField("notes", newProperty.notes).then((result)=>{
+        (0, _helpers.onSetError)("notes", result);
+    });
+});
+(0, _helpers.onUpdateField)("email", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        email: value
+    };
+    (0, _uploadPropertyValidations.formValidation).validateField("email", newProperty.email).then((result)=>{
+        (0, _helpers.onSetError)("email", result);
+    });
+});
+(0, _helpers.onUpdateField)("phone", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        phone: value
+    };
+    (0, _uploadPropertyValidations.formValidation).validateField("phone", newProperty.phone).then((result)=>{
+        (0, _helpers.onSetError)("phone", result);
+    });
+});
+(0, _helpers.onUpdateField)("price", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        price: value
+    };
+    (0, _uploadPropertyValidations.formValidation).validateField("price", newProperty.price).then((result)=>{
+        (0, _helpers.onSetError)("price", result);
+    });
+});
+const setSalesEvents = (list)=>{
+    list.forEach((element)=>{
+        const id = (0, _uploadPropertyHelpers.formatCheckboxId)(element);
+        (0, _helpers.onUpdateField)(id, (event)=>{
+            const value = event.target.value;
+            event.target.checked ? addSaleType(value) : removeSaleType(value);
+        });
+    });
+};
+// DATOS DE LA VIVIENDA ___________________________________________________
+(0, _helpers.onUpdateField)("address", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        address: value
+    };
+    (0, _uploadPropertyValidations.formValidation).validateField("address", newProperty.address).then((result)=>{
+        (0, _helpers.onSetError)("address", result);
+    });
+});
+(0, _helpers.onUpdateField)("city", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        city: value
+    };
+    (0, _uploadPropertyValidations.formValidation).validateField("city", newProperty.city).then((result)=>{
+        (0, _helpers.onSetError)("city", result);
+    });
+});
+(0, _helpers.onUpdateField)("province", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        province: value
+    };
+    (0, _uploadPropertyValidations.formValidation).validateField("province", newProperty.province).then((result)=>{
+        (0, _helpers.onSetError)("province", result);
+    });
+});
+(0, _helpers.onUpdateField)("squareMeter", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        squareMeter: value
+    };
+    (0, _uploadPropertyValidations.formValidation).validateField("squareMeter", newProperty.squareMeter).then((result)=>{
+        (0, _helpers.onSetError)("squareMeter", result);
+    });
+});
+(0, _helpers.onUpdateField)("rooms", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        rooms: value
+    };
+    (0, _uploadPropertyValidations.formValidation).validateField("rooms", newProperty.rooms).then((result)=>{
+        (0, _helpers.onSetError)("rooms", result);
+    });
+});
+(0, _helpers.onUpdateField)("bathrooms", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        bathrooms: value
+    };
+    (0, _uploadPropertyValidations.formValidation).validateField("bathrooms", newProperty.bathrooms).then((result)=>{
+        (0, _helpers.onSetError)("bathrooms", result);
+    });
+});
+(0, _helpers.onUpdateField)("locationUrl", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        locationUrl: value
+    };
+    (0, _uploadPropertyValidations.formValidation).validateField("locationUrl", newProperty.locationUrl).then((result)=>{
+        (0, _helpers.onSetError)("locationUrl", result);
+    });
+});
+(0, _helpers.onSubmitForm)("insert-feature-button", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        newFeature: [
+            ...newProperty.newFeature,
+            value
+        ]
+    };
+    (0, _uploadPropertyHelpers.onAddFeature)(value);
+    const featureId = (0, _uploadPropertyHelpers.formatDeleteFeatureButtonId)(value);
+    (0, _helpers.onSubmitForm)(featureId, (event)=>{
+        (0, _uploadPropertyHelpers.onRemoveFeature)(value);
+        const id = newProperty.newFeature.indexOf(value);
+        newProperty = newProperty.newFeature.filter((element)=>{});
+    });
+});
+const setEquipmentEvents = (list)=>{
+    list.forEach((element)=>{
+        const id = (0, _uploadPropertyHelpers.formatCheckboxId)(element);
+        (0, _helpers.onUpdateField)(id, (event)=>{
+            const value = event.target.value;
+            event.target.checked ? addEquipment(value) : removeEquipment(value);
+        });
+    });
+};
+// SUBIR FOTOS_____________________________________________________________
+const setImage = (image)=>{
+    const id = (0, _uploadPropertyHelpers.onAddImage)(image);
+    (0, _helpers.onUpdateField)(id, (event)=>{
+        event.target.value;
+    });
+};
+(0, _helpers.onUpdateField)("images", (event)=>{
+    const value = event.target.value;
+    newProperty = {
+        ...newProperty,
+        images: value
     };
 });
-(0, _elementHelpers.onSubmitForm)("contact-button", ()=>{
-    (0, _propertyDetailValidations.formValidation).validateForm(contact).then((result)=>{
-        (0, _elementHelpers.onSetFormErrors)(result);
+(0, _helpers.onSubmitForm)("save-button", ()=>{
+    console.log(newProperty);
+    (0, _uploadPropertyValidations.formValidation).validateForm(newProperty).then((result)=>{
+        (0, _helpers.onSetFormErrors)(result);
         if (result.succeeded) {
-            const apiContact = (0, _propertyDetailMappers.mapContactVmToApi)(contact);
-            (0, _propertyDetailApi.updateContact)(apiContact).then((response)=>{
-                alert("Mensaje enviado con \xe9xito");
+            const apiNewProperty = (0, _uploadPropertyMappers.mapPropertyVmToApi)(newProperty);
+            (0, _uploadPropertyApi.updateProperty)(apiNewProperty).then((response)=>{
+                alert("Nueva propiedad creada con \xe9xito");
             });
         }
     });
 });
 
-},{"./property-detail.api":"675is","./property-detail.mappers":"fd7bK","../../core/router/history":"7E2Mc","./property-detail.helpers":"fj9W2","../../common/helpers/element.helpers":"lvY4R","./property-detail.validations":"j2IvS"}],"675is":[function(require,module,exports) {
+},{"./upload-property.api":"dsXzM","./upload-property.helpers":"fPeMT","../../common/helpers":"tIcrk","./upload-property.validations":"71Ojx","./upload-property.mappers":"jeZJk"}],"dsXzM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "getProperty", ()=>getProperty);
+parcelHelpers.export(exports, "getSaleTypeList", ()=>getSaleTypeList);
+parcelHelpers.export(exports, "getProvinceList", ()=>getProvinceList);
 parcelHelpers.export(exports, "getEquipments", ()=>getEquipments);
-parcelHelpers.export(exports, "updateContact", ()=>updateContact);
+parcelHelpers.export(exports, "updateProperty", ()=>updateProperty);
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
-const url = `${"http://localhost:3000/api"}/properties`;
-const getProperty = (id)=>(0, _axiosDefault.default).get(`${url}/${id}`).then(({ data  })=>data);
+const saleTypeListUrl = `${"http://localhost:3000/api"}/saleTypes`;
+const getSaleTypeList = ()=>(0, _axiosDefault.default).get(saleTypeListUrl).then(({ data  })=>data);
+const provinceListUrl = `${"http://localhost:3000/api"}/provinces`;
+const getProvinceList = ()=>(0, _axiosDefault.default).get(provinceListUrl).then(({ data  })=>data);
 const equipmentUrl = `${"http://localhost:3000/api"}/equipments`;
 const getEquipments = ()=>(0, _axiosDefault.default).get(equipmentUrl).then(({ data  })=>data);
-const contactUrl = `${"http://localhost:3000/api"}/contact`;
-const updateContact = (contact)=>(0, _axiosDefault.default).post(`${contactUrl}`, contact).then(({ data  })=>data);
+const propertyUrl = `${"http://localhost:3000/api"}/properties`;
+const updateProperty = (prop)=>(0, _axiosDefault.default).post(`${propertyUrl}`, prop).then(({ data  })=>data);
 
 },{"axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
@@ -649,146 +850,334 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"fd7bK":[function(require,module,exports) {
+},{}],"fPeMT":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "mapPropertyDetailApiToVm", ()=>mapPropertyDetailApiToVm);
-parcelHelpers.export(exports, "mapContactVmToApi", ()=>mapContactVmToApi);
-const mapPropertyDetailApiToVm = (property, equipments)=>({
-        mainImage: Array.isArray(property.images) ? property.images[0] : "",
-        id: property.id,
-        title: property.title,
-        notes: `${property.notes}`,
-        price: `${property.price.toLocaleString()} €`,
-        city: property.city,
-        squareMeter: `${property.squareMeter} m2`,
-        rooms: `${property.rooms} ${getRoomWord(property.rooms)}`,
-        bathrooms: `${property.bathrooms} ${getBathRoomWord(property.bathrooms)}`,
-        locationUrl: property.locationUrl,
-        mainFeatures: property.mainFeatures,
-        equipments: getEquipmentName(property.equipmentIds, equipments),
-        images: property.images
-    });
-const getRoomWord = (rooms)=>rooms > 1 ? "habitaciones" : "habitaci\xf3n";
-const getBathRoomWord = (bathRooms)=>bathRooms > 1 ? "ba\xf1os" : "ba\xf1o";
-const getEquipmentName = (equipmentsIds, equipments)=>{
-    return equipmentsIds.map((equipmentId)=>{
-        const filteredEquipment = equipments.find((equipment)=>{
-            return equipment.id === equipmentId;
-        });
-        return filteredEquipment.name;
+parcelHelpers.export(exports, "formatCheckboxId", ()=>formatCheckboxId);
+parcelHelpers.export(exports, "setCheckboxList", ()=>setCheckboxList);
+parcelHelpers.export(exports, "setOptionList", ()=>setOptionList);
+parcelHelpers.export(exports, "formatDeleteFeatureButtonId", ()=>formatDeleteFeatureButtonId);
+parcelHelpers.export(exports, "onAddFeature", ()=>onAddFeature);
+parcelHelpers.export(exports, "onRemoveFeature", ()=>onRemoveFeature);
+parcelHelpers.export(exports, "onAddImage", ()=>onAddImage);
+const formatCheckboxId = (item)=>`${item.id}-${item.name}`;
+const getCheckbox = (item)=>{
+    const container = document.createElement("label");
+    container.classList.add("checkbox-contenedor");
+    container.textContent = item.name;
+    const input = document.createElement("input");
+    input.id = formatCheckboxId(item);
+    input.value = item.id;
+    input.type = "checkbox";
+    const checkmark = document.createElement("span");
+    checkmark.classList.add("checkmark");
+    container.appendChild(input);
+    container.appendChild(checkmark);
+    return container;
+};
+const setCheckboxList = (list, id)=>{
+    const listElement = document.getElementById(id);
+    list.forEach((item)=>{
+        const checkbox = getCheckbox(item);
+        listElement.appendChild(checkbox);
     });
 };
-const mapContactVmToApi = (contact)=>{
-    return {
-        email: contact.email,
-        message: contact.message
-    };
+const getOption = (item)=>{
+    const option = document.createElement("option");
+    option.value = item.id;
+    option.textContent = item.name;
+    return option;
+};
+const setOptionList = (list, id)=>{
+    const listElement = document.getElementById(id);
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Provincia";
+    listElement.appendChild(defaultOption);
+    list.forEach((item)=>{
+        const option = getOption(item);
+        listElement.appendChild(option);
+    });
+};
+const formatDeleteFeatureButtonId = (feature)=>`delete-${feature}-button`;
+const onAddFeature = (feature)=>{
+    const mainFeaturesElement = document.getElementById("mainFeatures");
+    const featureContainer = document.createElement("div");
+    featureContainer.id = `delete-${feature}`;
+    featureContainer.classList.add("feature");
+    const deleteButton = document.createElement("button");
+    deleteButton.id = formatDeleteFeatureButtonId(feature);
+    deleteButton.type = "button";
+    const featureElement = document.createElement("span");
+    featureElement.textContent = feature;
+    featureContainer.appendChild(deleteButton);
+    featureContainer.appendChild(featureElement);
+    mainFeaturesElement.appendChild(featureContainer);
+    const newFeatureElement = document.getElementById("newFeature");
+    newFeatureElement.value = "";
+};
+const onRemoveFeature = (feature)=>{
+    const mainFeaturesElement = document.getElementById("mainFeatures");
+    const featureContainer = document.getElementById(`delete-${feature}`);
+    mainFeaturesElement.removeChild(featureContainer);
+};
+const onAddImage = (image)=>{
+    const imagesElement = document.getElementById("images");
+    const addImageButton = document.getElementById("add-image-button");
+    const imageContainerElement = document.createElement("div");
+    imageContainerElement.classList.add("add_img");
+    const imageElement = document.createElement("img");
+    imageElement.src = image;
+    imageContainerElement.appendChild(imageElement);
+    imagesElement.insertBefore(imageContainerElement, addImageButton);
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fj9W2":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"tIcrk":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "setPropertyValues", ()=>setPropertyValues);
-const setMainFeatures = (property)=>{
-    const list = document.getElementById("mainFeatures");
-    property.mainFeatures.forEach((mainFeature)=>{
-        const li = document.createElement("li");
-        li.textContent = mainFeature;
-        list.appendChild(li);
-    });
-};
-const setEquipments = (property)=>{
-    const list = document.getElementById("equipments");
-    property.equipments.forEach((equipment)=>{
-        const li = document.createElement("li");
-        li.textContent = equipment;
-        list.appendChild(li);
-    });
-};
-const setImages = (property)=>{
-    const list = document.getElementById("images");
-    property.images.forEach((image, id)=>{
-        const li = document.createElement("li");
-        li.id = `image${id}`;
-        const img = getImage(image, id);
-        const overlayImg = getOverlayImage(image, id);
-        li.appendChild(img);
-        li.appendChild(overlayImg);
-        list.appendChild(li);
-    });
-};
-const getImage = (image, id)=>{
-    const container = document.createElement("div");
-    container.classList.add("mosaicItem");
-    const anchor = document.createElement("a");
-    anchor.href = `#popin${id}`;
-    const img = document.createElement("img");
-    img.src = image;
-    container.appendChild(anchor);
-    anchor.appendChild(img);
-    return container;
-};
-const getOverlayImage = (image, id)=>{
-    const container = document.createElement("div");
-    container.classList.add("popin");
-    container.id = `popin${id}`;
-    const anchor = document.createElement("a");
-    anchor.href = `#image${id}`;
-    const overlay = document.createElement("div");
-    overlay.classList.add("overlay");
-    const imageContainer = document.createElement("div");
-    imageContainer.classList.add("imgBox");
-    const img = document.createElement("img");
-    img.src = image;
-    container.appendChild(anchor);
-    anchor.appendChild(overlay);
-    anchor.appendChild(imageContainer);
-    imageContainer.appendChild(img);
-    return container;
-};
-const setPropertyValues = (property)=>{
-    const mainImage = document.getElementById("mainImage");
-    mainImage.src = property.mainImage;
-    const title = document.getElementById("title");
-    title.textContent = property.title;
-    const city = document.getElementById("city");
-    city.textContent = property.city;
-    const rooms = document.getElementById("rooms");
-    rooms.textContent = property.rooms;
-    const squareMeter = document.getElementById("squareMeter");
-    squareMeter.textContent = property.squareMeter;
-    const bathrooms = document.getElementById("bathrooms");
-    bathrooms.textContent = property.bathrooms;
-    const price = document.getElementById("price");
-    price.textContent = property.price;
-    const notes = document.getElementById("notes");
-    notes.textContent = property.notes;
-    setMainFeatures(property);
-    setEquipments(property);
-    const locationUrl = document.getElementById("locationUrl");
-    locationUrl.src = property.locationUrl;
-    setImages(property);
-};
+var _elementHelpers = require("./element.helpers");
+parcelHelpers.exportAll(_elementHelpers, exports);
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"j2IvS":[function(require,module,exports) {
+},{"./element.helpers":"lvY4R","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"71Ojx":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "formValidation", ()=>formValidation);
 var _fonk = require("@lemoncode/fonk");
+var _fonkIsNumberValidator = require("@lemoncode/fonk-is-number-validator");
+var _fonkIsUrlValidator = require("@lemoncode/fonk-is-url-validator");
 const validationSchema = {
     field: {
+        title: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            }
+        ],
+        notes: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            }
+        ],
         email: [
             {
                 validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            },
+            {
                 validator: (0, _fonk.Validators).email,
-                message: "Email no v\xe1lido"
+                message: "Introduzca un email v\xe1lido"
+            }
+        ],
+        phone: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            },
+            {
+                validator: (0, _fonk.Validators).pattern,
+                customArgs: {
+                    pattern: /^(6|7|8|9)\d{8}$/
+                },
+                message: "Introduzca un tel\xe9fono v\xe1lido"
+            }
+        ],
+        price: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            },
+            {
+                validator: (0, _fonkIsNumberValidator.isNumber).validator,
+                message: "Introduzca una cantidad v\xe1lida"
+            }
+        ],
+        saleTypes: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            }
+        ],
+        address: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            }
+        ],
+        city: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            }
+        ],
+        city: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            }
+        ],
+        province: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            }
+        ],
+        squareMeter: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            },
+            {
+                validator: (0, _fonkIsNumberValidator.isNumber).validator,
+                message: "Introduzca un n\xfamero v\xe1lido"
+            }
+        ],
+        rooms: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            },
+            {
+                validator: (0, _fonkIsNumberValidator.isNumber).validator,
+                message: "Introduzca un n\xfamero v\xe1lido"
+            }
+        ],
+        bathrooms: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            },
+            {
+                validator: (0, _fonkIsNumberValidator.isNumber).validator,
+                message: "Introduzca un n\xfamero v\xe1lido"
+            }
+        ],
+        locationUrl: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
+            },
+            {
+                validator: (0, _fonkIsUrlValidator.isUrl).validator,
+                message: "Introduzca un Url v\xe1lido"
+            }
+        ],
+        equipments: [
+            {
+                validator: (0, _fonk.Validators).required,
+                message: "Campo requerido"
             }
         ]
     }
 };
 const formValidation = (0, _fonk.createFormValidation)(validationSchema);
 
-},{"@lemoncode/fonk":"lVeW7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["eJXPq","aoGpU"], "aoGpU", "parcelRequire4bdb")
+},{"@lemoncode/fonk":"lVeW7","@lemoncode/fonk-is-number-validator":"Dd9bI","@lemoncode/fonk-is-url-validator":"CHSfk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Dd9bI":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "isNumber", ()=>validator$1);
+var VALIDATOR_TYPE = "IS_NUMBER";
+var defaultCustomArgs = {
+    strictTypes: false
+};
+var setCustomArgs = function setCustomArgs(customArgs) {
+    return defaultCustomArgs = customArgs;
+};
+var defaultMessage = "Must be a number";
+var setErrorMessage = function setErrorMessage(message) {
+    return defaultMessage = message;
+};
+var isDefined = function isDefined(value) {
+    return value !== void 0 && value !== null && value !== "";
+};
+var validateType = function validateType(value, args) {
+    return !args.strictTypes || typeof value === "number";
+};
+var validate = function validate(value) {
+    return !isNaN(Number(value));
+};
+var validator = function validator(fieldValidatorArgs) {
+    var value = fieldValidatorArgs.value, _fieldValidatorArgs$m = fieldValidatorArgs.message, message = _fieldValidatorArgs$m === void 0 ? defaultMessage : _fieldValidatorArgs$m, _fieldValidatorArgs$c = fieldValidatorArgs.customArgs, customArgs = _fieldValidatorArgs$c === void 0 ? defaultCustomArgs : _fieldValidatorArgs$c;
+    var succeeded = !isDefined(value) || validateType(value, customArgs) && validate(value);
+    return {
+        succeeded: succeeded,
+        message: succeeded ? "" : message,
+        type: VALIDATOR_TYPE
+    };
+};
+var validator$1 = /*#__PURE__*/ Object.freeze({
+    __proto__: null,
+    setCustomArgs: setCustomArgs,
+    setErrorMessage: setErrorMessage,
+    validator: validator
+});
 
-//# sourceMappingURL=property-detail.8cf1b399.js.map
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"CHSfk":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "isUrl", ()=>validator$1);
+var _fonk = require("@lemoncode/fonk");
+var VALIDATOR_TYPE = "IS_URL";
+var defaultMessage = "Provided value is not a valid url";
+var setErrorMessage = function setErrorMessage(message) {
+    return defaultMessage = message;
+};
+var isDefined = function isDefined(value) {
+    return value !== void 0 && value !== null && value !== "";
+};
+var regex = /^(?:((?:(?:https?|ftp):\/\/))|(?:www.))+(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/;
+var isUrl = function isUrl(url) {
+    return regex.test(url);
+};
+var validator = function validator(fieldValidatorArgs) {
+    var value = fieldValidatorArgs.value, _fieldValidatorArgs$m = fieldValidatorArgs.message, message = _fieldValidatorArgs$m === void 0 ? defaultMessage : _fieldValidatorArgs$m, customArgs = fieldValidatorArgs.customArgs;
+    var succeeded = !isDefined(value) || isUrl(value);
+    return {
+        succeeded: succeeded,
+        message: succeeded ? "" : (0, _fonk.parseMessageWithCustomArgs)(message || defaultMessage, customArgs),
+        type: VALIDATOR_TYPE
+    };
+};
+var validator$1 = /*#__PURE__*/ Object.freeze({
+    __proto__: null,
+    setErrorMessage: setErrorMessage,
+    validator: validator
+});
+
+},{"@lemoncode/fonk":"lVeW7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jeZJk":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "mapPropertyVmToApi", ()=>mapPropertyVmToApi);
+const mapPropertyVmToApi = (prop)=>{
+    return {
+        title: prop.title,
+        notes: prop.notes,
+        email: prop.email,
+        phone: prop.phone,
+        price: prop.price,
+        saleTypes: prop.saleTypes,
+        address: prop.address,
+        city: prop.city,
+        province: prop.province,
+        squareMeter: prop.squareMeter,
+        rooms: prop.rooms,
+        bathrooms: prop.bathrooms,
+        locationUrl: prop.locationUrl,
+        newFeature: prop.newFeature,
+        mainFeatures: prop.mainFeatures,
+        equipmentIds: getEquipmentID(prop.equipments, equipments),
+        images: prop.images
+    };
+};
+const getEquipmentID = (equipmentId, equipmentName)=>{
+    return equipmentId.map((apiEquipment)=>{
+        const filteredEquipment = equipmentName.find((equipment)=>{
+            return equipment.name === apiEquipment;
+        });
+        return filteredEquipment.id;
+    });
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["aN4KM","1pyLr"], "1pyLr", "parcelRequire4bdb")
+
+//# sourceMappingURL=upload-property.ada048aa.js.map

@@ -652,7 +652,37 @@ const getSaleTypeList = ()=>(0, _axiosDefault.default).get(saleTypeListUrl).then
 const provinceListUrl = `${"http://localhost:3000/api"}/provinces`;
 const getProvinceList = ()=>(0, _axiosDefault.default).get(provinceListUrl).then(({ data  })=>data);
 
-},{"axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"f83YX":[function(require,module,exports) {
+},{"axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"f83YX":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "mapPropertyListApiToVm", ()=>mapPropertyListApiToVm);
@@ -973,80 +1003,6 @@ parcelHelpers.defineInteropFlag(exports);
 var _elementHelpers = require("./element.helpers");
 parcelHelpers.exportAll(_elementHelpers, exports);
 
-},{"./element.helpers":"lvY4R","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lvY4R":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "onUpdateField", ()=>onUpdateField);
-parcelHelpers.export(exports, "onSubmitForm", ()=>onSubmitForm);
-parcelHelpers.export(exports, "onAddFile", ()=>onAddFile);
-parcelHelpers.export(exports, "onSetError", ()=>onSetError);
-parcelHelpers.export(exports, "onSetFormErrors", ()=>onSetFormErrors);
-parcelHelpers.export(exports, "onSetValues", ()=>onSetValues);
-const onUpdateField = (id, callback)=>{
-    const element = document.getElementById(id);
-    element.oninput = (event)=>callback(event);
-    if (element.type !== "checkbox") element.onblur = (event)=>callback(event);
-};
-const onSubmitForm = (id, callback)=>{
-    const element = document.getElementById(id);
-    element.onclick = (e)=>{
-        e.preventDefault();
-        callback();
-    };
-};
-const onAddFile = (id, callback)=>{
-    const input = document.getElementById(id);
-    input.onchange = ()=>{
-        const file = input.files[0];
-        const fileReader = new FileReader();
-        fileReader.onloadend = ()=>{
-            callback(fileReader.result);
-        };
-        fileReader.readAsDataURL(file);
-    };
-};
-const onSetError = (id, error)=>{
-    if (error.succeeded) {
-        removeElementClass(id);
-        setErrorMessage(id, "");
-    } else {
-        setElementClass(id);
-        setErrorMessage(id, error.message);
-    }
-};
-const setElementClass = (id)=>{
-    const element = document.getElementById(id);
-    if (element) element.classList.add("error");
-};
-const removeElementClass = (id)=>{
-    const element = document.getElementById(id);
-    if (element) element.classList.remove("error");
-};
-const setErrorMessage = (id, message)=>{
-    const messageElement = document.getElementById(`${id}-error`);
-    if (messageElement) messageElement.textContent = message;
-};
-const onSetFormErrors = ({ fieldErrors  })=>{
-    Object.entries(fieldErrors).forEach(([key, value])=>{
-        onSetError(key, value);
-    });
-};
-const setValue = (element, value)=>{
-    const elementType = element.tagName.toLowerCase();
-    if (elementType === "select" || elementType === "input" || elementType === "textarea") element.value = value;
-    else element.textContent = value;
-};
-const onSetValue = (id, value)=>{
-    const element = document.getElementById(id);
-    console.log({
-        element
-    });
-    if (element) setValue(element, value);
-};
-const onSetValues = (values)=>{
-    Object.entries(values).forEach(([key, value])=>onSetValue(key, value));
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["0SIel","38ufr"], "38ufr", "parcelRequire4bdb")
+},{"./element.helpers":"lvY4R","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["0SIel","38ufr"], "38ufr", "parcelRequire4bdb")
 
 //# sourceMappingURL=property-list.19e5af3f.js.map
