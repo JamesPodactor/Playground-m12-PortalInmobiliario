@@ -8,7 +8,7 @@ import {
     onRemoveFeature,
     onAddImage,
 } from "./upload-property.helpers";
-import { onUpdateField, onSubmitForm, onSetError, onSetFormErrors } from "../../common/helpers";
+import { onUpdateField, onSubmitForm, onSetError, onSetFormErrors, onAddFile } from "../../common/helpers";
 import { formValidation } from "./upload-property.validations";
 import { mapPropertyVmToApi } from "./upload-property.mappers";
 
@@ -26,7 +26,6 @@ let newProperty = {
     rooms: '',
     bathrooms: '',
     locationUrl: '',
-    newFeature: '',
     mainFeatures: [],
     equipments: [],
     images: '',
@@ -51,7 +50,7 @@ const addSaleType = value => {
 
 const removeSaleType = value => {
     const idElement = newProperty.saleTypes.indexOf(value);
-    newProperty = newProperty.saleTypes.filter(element => {
+    newProperty.saleTypes = newProperty.saleTypes.filter(element => {
         element !== idElement
     });
 };
@@ -64,8 +63,8 @@ const addEquipment = value => {
 };
 
 const removeEquipment = value => {
-    const idCheckbox = newProperty.equipment.indexOf(value);
-    newProperty = newProperty.equipment.filter(element => {
+    const idCheckbox = newProperty.equipments.indexOf(value);
+    newProperty.equipments = newProperty.equipments.filter(element => {
         element !== idCheckbox
     });
 };
@@ -193,18 +192,18 @@ onUpdateField('locationUrl', event => {
 });
 
 onSubmitForm('insert-feature-button', event => {
-    const value = event.target.value;
+    const value = document.getElementById('newFeature').value;
     newProperty = { 
         ...newProperty, 
-        newFeature: [...newProperty.newFeature, value]
+        mainFeatures: [...newProperty.mainFeatures, value]
     };
     onAddFeature(value);
 
     const featureId = formatDeleteFeatureButtonId(value);
     onSubmitForm(featureId, event => {
         onRemoveFeature(value);
-        const id = newProperty.newFeature.indexOf(value);
-        newProperty = newProperty.newFeature.filter(element => {
+        const id = newProperty.mainFeatures.indexOf(value);
+        newProperty.mainFeatures = newProperty.mainFeatures.filter(element => {
             element !== id
         });
     })
@@ -222,22 +221,16 @@ const setEquipmentEvents = list => {
 
 // SUBIR FOTOS_____________________________________________________________
 
-const setImage = image => {
-    const id = onAddImage(image);
-    onUpdateField(id, event => {
-        event.target.value;
-    })
-}
-
-
-onUpdateField('images', event => {
-    const value = event.target.value;
-    newProperty = { ...newProperty, images: value };
+onAddFile('add-image', img => {
+    onAddImage(img);
+    newProperty = { ...newProperty, images: [
+        ...newProperty.images,
+        img,
+    ] };
 
 });
 
 onSubmitForm('save-button', () => {
-    console.log(newProperty)
     formValidation.validateForm(newProperty).then(result => {
         onSetFormErrors(result);
         if(result.succeeded) {

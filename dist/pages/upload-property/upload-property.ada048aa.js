@@ -576,7 +576,6 @@ let newProperty = {
     rooms: "",
     bathrooms: "",
     locationUrl: "",
-    newFeature: "",
     mainFeatures: [],
     equipments: [],
     images: ""
@@ -603,7 +602,7 @@ const addSaleType = (value)=>{
 };
 const removeSaleType = (value)=>{
     const idElement = newProperty.saleTypes.indexOf(value);
-    newProperty = newProperty.saleTypes.filter((element)=>{});
+    newProperty.saleTypes = newProperty.saleTypes.filter((element)=>{});
 };
 const addEquipment = (value)=>{
     newProperty = {
@@ -615,8 +614,8 @@ const addEquipment = (value)=>{
     };
 };
 const removeEquipment = (value)=>{
-    const idCheckbox = newProperty.equipment.indexOf(value);
-    newProperty = newProperty.equipment.filter((element)=>{});
+    const idCheckbox = newProperty.equipments.indexOf(value);
+    newProperty.equipments = newProperty.equipments.filter((element)=>{});
 };
 // DATOS GENERALES ________________________________________________________
 (0, _helpers.onUpdateField)("title", (event)=>{
@@ -750,11 +749,11 @@ const setSalesEvents = (list)=>{
     });
 });
 (0, _helpers.onSubmitForm)("insert-feature-button", (event)=>{
-    const value = event.target.value;
+    const value = document.getElementById("newFeature").value;
     newProperty = {
         ...newProperty,
-        newFeature: [
-            ...newProperty.newFeature,
+        mainFeatures: [
+            ...newProperty.mainFeatures,
             value
         ]
     };
@@ -762,8 +761,8 @@ const setSalesEvents = (list)=>{
     const featureId = (0, _uploadPropertyHelpers.formatDeleteFeatureButtonId)(value);
     (0, _helpers.onSubmitForm)(featureId, (event)=>{
         (0, _uploadPropertyHelpers.onRemoveFeature)(value);
-        const id = newProperty.newFeature.indexOf(value);
-        newProperty = newProperty.newFeature.filter((element)=>{});
+        const id = newProperty.mainFeatures.indexOf(value);
+        newProperty.mainFeatures = newProperty.mainFeatures.filter((element)=>{});
     });
 });
 const setEquipmentEvents = (list)=>{
@@ -776,21 +775,17 @@ const setEquipmentEvents = (list)=>{
     });
 };
 // SUBIR FOTOS_____________________________________________________________
-const setImage = (image)=>{
-    const id = (0, _uploadPropertyHelpers.onAddImage)(image);
-    (0, _helpers.onUpdateField)(id, (event)=>{
-        event.target.value;
-    });
-};
-(0, _helpers.onUpdateField)("images", (event)=>{
-    const value = event.target.value;
+(0, _helpers.onAddFile)("add-image", (img)=>{
+    (0, _uploadPropertyHelpers.onAddImage)(img);
     newProperty = {
         ...newProperty,
-        images: value
+        images: [
+            ...newProperty.images,
+            img
+        ]
     };
 });
 (0, _helpers.onSubmitForm)("save-button", ()=>{
-    console.log(newProperty);
     (0, _uploadPropertyValidations.formValidation).validateForm(newProperty).then((result)=>{
         (0, _helpers.onSetFormErrors)(result);
         if (result.succeeded) {
@@ -1163,19 +1158,10 @@ const mapPropertyVmToApi = (prop)=>{
         rooms: prop.rooms,
         bathrooms: prop.bathrooms,
         locationUrl: prop.locationUrl,
-        newFeature: prop.newFeature,
         mainFeatures: prop.mainFeatures,
-        equipmentIds: getEquipmentID(prop.equipments, equipments),
+        equipmentIds: prop.equipments,
         images: prop.images
     };
-};
-const getEquipmentID = (equipmentId, equipmentName)=>{
-    return equipmentId.map((apiEquipment)=>{
-        const filteredEquipment = equipmentName.find((equipment)=>{
-            return equipment.name === apiEquipment;
-        });
-        return filteredEquipment.id;
-    });
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["aN4KM","1pyLr"], "1pyLr", "parcelRequire4bdb")

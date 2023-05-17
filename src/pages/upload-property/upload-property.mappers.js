@@ -13,18 +13,8 @@ export const mapPropertyVmToApi = prop => {
         rooms: prop.rooms,
         bathrooms: prop.bathrooms,
         locationUrl: prop.locationUrl,
-        newFeature: prop.newFeature,
         mainFeatures: prop.mainFeatures,
-        equipmentIds: getEquipmentID(prop.equipments, equipments),
+        equipmentIds: prop.equipments,
         images: prop.images,
     }
 };
-
-const getEquipmentID = (equipmentId, equipmentName) => {
-    return equipmentId.map(apiEquipment => {
-      const filteredEquipment = equipmentName.find(equipment => {
-        return equipment.name === apiEquipment
-      })
-      return filteredEquipment.id;
-    });
-  };
